@@ -61,14 +61,17 @@ print("first: ", next)
 while next:
 
     # Find elements with the class "mention_date"
-    elements = driver.find_elements(By.CLASS_NAME, 'mention__date')
+    links = driver.find_elements(By.CLASS_NAME, 'mention__date')
+    numbers = driver.find_elements(By.CLASS_NAME, 'number')
+
 
     # Extract href references from the elements
-    hrefs = [element.get_attribute('href') for element in elements]
+    hrefs = [link.get_attribute('href') for link in links]
+    entries = [number.text for number in numbers]
 
     # Print the extracted href references
-    for href in enumerate(hrefs, start=1):
-        link_list.append(href)
+    for counter, href in enumerate(hrefs):
+        link_list.append((entries[counter], href))
 
 # check if last page is reached and exit while loop
     try:
@@ -78,10 +81,6 @@ while next:
     except:
         print("last page")
         next = False
-    else:
-        next.click()
-        time.sleep(10)
-        next = driver.find_element(By.CLASS_NAME, "next")
 
 # create csv file from list with the link and the appropriate numbers        
 else:
